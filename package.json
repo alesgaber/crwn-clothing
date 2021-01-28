@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "firebase": "^8.2.4",
     "node-sass": "4.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -39,9 +40,13 @@
     ],
     "rules": {
       "react/prop-types": 0,
-      "react/jsx-props-no-spreading" :0,
+      "react/jsx-props-no-spreading": 0,
       "react/destructuring-assignment": 1,
-      "react/no-unused-state":0
+      "react/no-unused-state": 0,
+      "jsx-a11y/label-has-associated-control": [
+        0
+      ],
+      "jsx-a11y/no-static-element-interactions":[0]
     }
   },
   "browserslist": {
