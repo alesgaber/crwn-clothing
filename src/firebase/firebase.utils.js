@@ -12,13 +12,39 @@ const config = {
   measurementId: 'G-B0PJ1RV09T',
 };
 
-firebase.initializeApp(config);
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(config);
+}
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ propmt: 'select_account' });
+
 export const signinWithGoogle = () => auth.signInWithPopup(provider);
+
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+      });
+    } catch (error) {
+      console.log('error created user', error.message);
+    }
+  }
+  return userRef;
+};
 
 export default firebase;
