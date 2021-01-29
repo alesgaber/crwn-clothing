@@ -7,7 +7,7 @@ const CustomButton = ({ children, isGoogleSignIn, ...otherProps }) => (
     className={`${isGoogleSignIn ? 'google-sign-in' : ''} custom-button`}
     {...otherProps}
   >
-    {children} {JSON.stringify(isGoogleSignIn)}
+    {children}
   </button>
 );
 
