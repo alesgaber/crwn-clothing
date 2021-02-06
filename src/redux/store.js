@@ -8,10 +8,9 @@ const midlewares = [];
 
 if (process.env.NODE_ENV === 'development') {
   midlewares.push(logger);
+  console.log(process.env.NODE_ENV);
 }
 
 export const store = createStore(rootReducers, applyMiddleware(...midlewares));
 
 export const persistor = persistStore(store);
-
-// export { store, persistor };

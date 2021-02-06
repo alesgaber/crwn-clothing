@@ -16,6 +16,23 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(config);
 }
 
+export const convertCollectionSnapshotToMap = (collections) => {
+  const transformCollections = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+  return transformCollections.reduce((acc, collection) => {
+    acc[collection.title.toLowerCase()] = collection;
+
+    return acc;
+  }, {});
+};
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
@@ -48,3 +65,20 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 };
 
 export default firebase;
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
+
+  const batch = firestore.batch();
+
+  objectsToAdd.forEach((obj) => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj);
+  });
+
+  const promise = await batch.commit();
+
+  return promise;
+};
