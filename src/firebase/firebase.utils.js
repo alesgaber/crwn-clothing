@@ -36,10 +36,18 @@ export const convertCollectionSnapshotToMap = (collections) => {
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ propmt: 'select_account' });
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ propmt: 'select_account' });
 
-export const signinWithGoogle = () => auth.signInWithPopup(provider);
+export const getCurrentUser = () =>
+  new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      unsubscribe();
+      resolve(userAuth);
+    }, reject);
+  });
+
+export const signinWithGoogle = () => auth.signInWithPopup(googleProvider);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
@@ -56,6 +64,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         displayName,
         email,
         createdAt,
+        ...additionalData,
       });
     } catch (error) {
       console.log('error created user', error.message);
