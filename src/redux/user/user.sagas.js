@@ -57,7 +57,6 @@ export function* onSignOut() {
 export function* isUserAuthenticated() {
   try {
     const userAuth = yield getCurrentUser();
-    console.log(userAuth);
     if (!userAuth) return;
 
     yield getSnapshotFormUserAuth(userAuth);
